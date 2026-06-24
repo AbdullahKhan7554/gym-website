@@ -1,0 +1,213 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #050505;
+  --bg-secondary: #0f0f0f;
+  --bg-elevated: #161616;
+  --text-primary: #f8f8f8;
+  --text-secondary: #a8a8a8;
+  --accent: #39ff14;
+  --accent-hot: #6dff4d;
+  --focus-ring: #6dff4d;
+
+  --glass-bg: rgba(15, 15, 15, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
+  font-feature-settings: "ss01", "cv01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent);
+  color: #050505;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #262626;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #23c40a;
+}
+
+/* Focus visible — accessibility */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@layer components {
+  .container-px {
+    @apply mx-auto w-full max-w-container px-5 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-eyebrow text-accent;
+  }
+
+  .glass {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(14px) saturate(135%);
+    backdrop-filter: blur(14px) saturate(135%);
+    border: 1px solid var(--glass-border);
+  }
+
+  /* Skip rendering offscreen sections — big initial-render + scroll win */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
+  }
+
+  .text-gradient {
+    background: linear-gradient(180deg, #ffffff 0%, #a8a8a8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hairline {
+    @apply border border-iron-line;
+  }
+
+  .card-base {
+    @apply rounded-card border border-white/[0.06];
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.035),
+        rgba(255, 255, 255, 0) 30%
+      ),
+      #0f0f0f;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Outlined display text for the kinetic brand marquee */
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(248, 248, 248, 0.25);
+  }
+
+  /* Tactile press feedback for interactive surfaces */
+  .press {
+    @apply transition-transform duration-200 active:scale-[0.97];
+  }
+}
+
+/* Glass fallback when backdrop-filter unsupported / reduced transparency */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .glass {
+    background: #0c0c0c;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: #0c0c0c;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Reduced motion — collapse all motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.grain,
+.noise {
+  position: fixed;
+  inset: -150%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.04;
+  width: 400%;
+  height: 400%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.grain {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Cinematic vignette — darkens edges for a filmic, premium frame (cheap, static) */
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    120% 120% at 50% 45%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+/* Animated noise — GPU transform steps, no repaint of the texture */
+.noise {
+  animation: noise-shift 0.6s steps(4) infinite;
+  will-change: transform;
+}
+@keyframes noise-shift {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-3%, 2%, 0); }
+  50% { transform: translate3d(2%, -3%, 0); }
+  75% { transform: translate3d(-2%, -2%, 0); }
+  100% { transform: translate3d(3%, 3%, 0); }
+}
+
+/* Hide native cursor when the custom cursor is active (fine pointers only) */
+body.cursor-none,
+body.cursor-none * {
+  cursor: none !important;
+}
+
+/* Intro gate — set pre-paint by an inline script so the body is scroll-locked
+   while the intro overlay plays. Released to "done" when the intro finishes. */
+html[data-intro="new"] body {
+  overflow: hidden;
+}
