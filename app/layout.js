@@ -3,6 +3,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import GlobalFX from "@/components/fx/GlobalFX";
 import IntroExperience from "@/components/intro/IntroExperience";
+import WhatsAppButton from "@/components/fx/WhatsAppButton";
 
 // Runs before paint: marks the intro as pending so the overlay shows with no
 // content flash and the body is scroll-locked until the intro completes.
@@ -102,6 +103,7 @@ export default function RootLayout({ children }) {
         <IntroExperience />
         <div className="vignette" aria-hidden="true" />
         <GlobalFX />
+        <WhatsAppButton />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
