@@ -38,7 +38,7 @@ export default function WhatsAppButton() {
   useEffect(() => {
     const reveal = () => setVisible(true);
     window.addEventListener("intro:done", reveal, { once: true });
-    const fallback = setTimeout(reveal, 6000);
+    const fallback = setTimeout(reveal, 5000);
     return () => {
       window.removeEventListener("intro:done", reveal);
       clearTimeout(fallback);
@@ -68,7 +68,13 @@ export default function WhatsAppButton() {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-[90] sm:bottom-7 sm:right-7">
+    <div
+      className="fixed z-[90]"
+      style={{
+        right: "calc(env(safe-area-inset-right, 0px) + 1.1rem)",
+        bottom: "calc(env(safe-area-inset-bottom, 0px) + 1.5rem)",
+      }}
+    >
       <AnimatePresence>
         {visible && (
           <motion.div
